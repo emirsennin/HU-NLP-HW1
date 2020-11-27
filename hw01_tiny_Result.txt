@@ -1,0 +1,64 @@
+hw01_tiny.txt
+
+Number of Sentences in Test File : 4
+
+Number of Total Tokens : 19
+
+Number of Unique Words (Vocabulary Size) : 8
+
+Top 10 Unigrams with Highest Frequencies:
+
+   Text  Count  Probability
+1  came      7     0.368421
+2     i      4     0.210526
+0    he      2     0.105263
+4  they      2     0.105263
+3   and      1     0.052632
+5   did      1     0.052632
+6   not      1     0.052632
+7  come      1     0.052632
+
+Top 10 Bigrams with Highest Frequencies:
+
+         Text  Count  UniProbabilty  BiProbability
+1     he came      2       0.086957       1.000000
+7      and he      1       0.043478       1.000000
+9   they came      2       0.086957       1.000000
+11    did not      1       0.043478       1.000000
+12   not come      1       0.043478       1.000000
+13  come they      1       0.043478       1.000000
+3      i came      3       0.130435       0.750000
+4   came </s>      4       0.173913       0.571429
+2      came i      2       0.086957       0.285714
+10      i did      1       0.043478       0.250000
+
+After UNK addition and Smoothing Operations:
+
+Top 10 Bigrams with Highest Frequencies:
+
+         Text  Count  UniProbabilty  BiProbability
+1     he came      2       0.086957       1.000000
+7      and he      1       0.043478       1.000000
+9   they came      2       0.086957       1.000000
+3      i came      3       0.130435       0.750000
+11    unk unk      2       0.086957       0.666667
+4   came </s>      4       0.173913       0.571429
+12   unk they      1       0.043478       0.333333
+2      came i      2       0.086957       0.285714
+10      i unk      1       0.043478       0.250000
+6    came and      1       0.043478       0.142857
+
+Top 10 Bigrams with UNK:
+
+         Text  Count  UniProbabilty  BiProbability
+1     he came      2       0.086957       0.500000
+3      i came      3       0.130435       0.500000
+9   they came      2       0.086957       0.500000
+4   came </s>      4       0.173913       0.450000
+11    unk unk      2       0.086957       0.416667
+7      and he      1       0.043478       0.375000
+2      came i      2       0.086957       0.250000
+12   unk they      1       0.043478       0.250000
+10      i unk      1       0.043478       0.214286
+6    came and      1       0.043478       0.150000
+

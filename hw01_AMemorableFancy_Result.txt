@@ -1,0 +1,66 @@
+hw01_AMemorableFancy.txt
+
+Number of Sentences in Test File : 7
+
+Number of Total Tokens : 116
+
+Number of Unique Words (Vocabulary Size) : 69
+
+Top 10 Unigrams with Highest Frequencies:
+
+     Text  Count  Probability
+12    the     16     0.137931
+0       a      6     0.051724
+28    and      6     0.051724
+1    bird      5     0.043103
+14    cat      5     0.043103
+30     to      3     0.025862
+8      of      3     0.025862
+51  puppy      3     0.025862
+6      on      3     0.025862
+9    tree      2     0.017241
+
+Top 10 Bigrams with Highest Frequencies:
+
+              Text  Count  UniProbabilty  BiProbability
+110      away </s>      1       0.008065            1.0
+50        s throat      1       0.008065            1.0
+58      break free      1       0.008065            1.0
+56      managed to      1       0.008065            1.0
+96        so shook      1       0.008065            1.0
+54   struggled and      1       0.008065            1.0
+97       shook off      1       0.008065            1.0
+51     throat </s>      1       0.008065            1.0
+46      teeth into      1       0.008065            1.0
+34    moved closer      1       0.008065            1.0
+
+After UNK addition and Smoothing Operations:
+
+Top 10 Bigrams with Highest Frequencies:
+
+              Text  Count  UniProbabilty  BiProbability
+44        sink its      1       0.008065            1.0
+28        near the      1       0.008065            1.0
+31  stealthily the      1       0.008065            1.0
+76     turned into      1       0.008065            1.0
+74         did the      1       0.008065            1.0
+34    moved closer      1       0.008065            1.0
+35     closer then      1       0.008065            1.0
+36    then pounced      1       0.008065            1.0
+37      pounced on      2       0.016129            1.0
+73          it did      1       0.008065            1.0
+
+Top 10 Bigrams with UNK:
+
+               Text  Count  UniProbabilty  BiProbability
+10             of a      3       0.024194       0.095890
+48         the bird      4       0.032258       0.090909
+32          the cat      4       0.032258       0.090909
+12        tree </s>      2       0.016129       0.070423
+37       pounced on      2       0.016129       0.070423
+38           on the      2       0.016129       0.068493
+66      <s> quickly      1       0.008065       0.051724
+52          <s> the      2       0.016129       0.051724
+30   <s> stealthily      1       0.008065       0.051724
+100         <s> and      1       0.008065       0.051724
+

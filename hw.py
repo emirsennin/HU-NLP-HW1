@@ -10,20 +10,17 @@ import numpy as np
 def sentenceTokenize(data):
     sentenceTokenizer = nltk.data.load('tokenizers/punkt/english.pickle')
     sentenceTokens = sentenceTokenizer.tokenize(data)
-    print("Number of Sentences in Test File : " + str(len(sentenceTokens)))
-    print('\n-----\n'.join(sentenceTokenizer.tokenize(data)))
+    # print('\n-----\n'.join(sentenceTokenizer.tokenize(data)))
     return sentenceTokens
 
 def wordTokenize(data):
     wordTokens = nltk.word_tokenize(data)
     wordTokens = [word.lower() for word in wordTokens if word.isalpha()]
-    print("Number of Total Tokens : " + str(len(wordTokens)))
     return wordTokens
 
 def freqFinder(wordTokens):
     fdist1 = nltk.FreqDist(wordTokens)
     filtered_word_freq = dict((word, freq) for word, freq in fdist1.items() if not word.isdigit())
-    print("Number of Unique Words (Vocabulary Size) : " + str(len(filtered_word_freq.values())))
     return filtered_word_freq
 
 def unigramFinder(sentenceTokens,wordCount):
@@ -34,7 +31,6 @@ def unigramFinder(sentenceTokens,wordCount):
         unigrams = ngrams(new_sentence.split(), 1)
         for grams in unigrams:
             unigramList.append(" ".join(grams))
-            print(grams)
     count = Counter(unigramList)
     unigramDf = pd.DataFrame.from_dict(count, orient='index').reset_index()
     unigramDf = unigramDf.rename(columns={'index':'Text',0:'Count'})
@@ -55,7 +51,6 @@ def bigramFinder(sentenceTokens,unigramDf,k,unique_vocab):
 
         for grams in bigrams:
             bigramList.append(" ".join(grams))
-            print(grams)
     count = Counter(bigramList)
     bigramDf = pd.DataFrame.from_dict(count, orient='index').reset_index()
     bigramDf = bigramDf.rename(columns={'index':'Text',0:'Count'})
@@ -77,31 +72,41 @@ def bigramFinder(sentenceTokens,unigramDf,k,unique_vocab):
     # bigramProbality = ikilinin unigram countu/ilk kelimenin unigram countu
     return bigramDf
 
-def addKsmoothing(df):
-    pass
 
 def makeLowestUnknown(data,unigramDf):
     replaces = unigramDf.sort_values(by="Probability",ascending=False).Text.values[-3:]
     newData = data.replace(replaces[0],"UNK").replace(replaces[1],"UNK").replace(replaces[2],"UNK")
     return newData
+
+def calculateProbabilityOfNewSentence():
+    pass
+
 def generalFunc(path,name):
     print("\n\n--------- Starting To Work For "+name+"-------------\n\n")
     file = open(path)
-    print(os.path.basename(file.name))
+    writeFile = open(name+"_Result.txt","a")
+    writeFile.writelines(str(os.path.basename(file.name) + "\n\n"))
 
     data = file.read()
 
     sentenceTokens = sentenceTokenize(data)
+    writeFile.writelines("Number of Sentences in Test File : " + str(len(sentenceTokens))+"\n\n")
 
     wordTokens = wordTokenize(data)
+    writeFile.writelines("Number of Total Tokens : " + str(len(wordTokens))+"\n\n")
 
     filtered_word_freq = freqFinder(wordTokens)
+    writeFile.writelines("Number of Unique Words (Vocabulary Size) : " + str(len(filtered_word_freq.values()))+"\n\n")
 
     unigramDf = unigramFinder(sentenceTokens,len(wordTokens))
+    writeFile.writelines("Top 10 Unigrams with Highest Frequencies:\n\n")
+    writeFile.writelines(unigramDf.sort_values(by="Probability",ascending=False).head(10).to_string()+"\n\n")
 
     bigramDf = bigramFinder(sentenceTokens,unigramDf,0,0)
-    print(bigramDf.sort_values(by="BiProbability", ascending=False))
-    print(bigramDf.head())
+    writeFile.writelines("Top 10 Bigrams with Highest Frequencies:\n\n")
+    writeFile.writelines(bigramDf.sort_values(by="BiProbability", ascending=False).head(10).to_string()+"\n\n")
+
+    writeFile.writelines("After UNK addition and Smoothing Operations:\n\n")
 
     data_with_unknown = makeLowestUnknown(data,unigramDf)
 
@@ -114,12 +119,20 @@ def generalFunc(path,name):
     unigramDfWithUnknown = unigramFinder(sentenceTokensWitUnknown,len(wordTokensWithUnknown))
 
     bigramDfWithUnknown = bigramFinder(sentenceTokensWitUnknown,unigramDfWithUnknown,0,0)
-    print(bigramDfWithUnknown.sort_values(by="BiProbability", ascending=False))
-    print(bigramDfWithUnknown.head())
+    writeFile.writelines("Top 10 Bigrams with Highest Frequencies:\n\n")
+    writeFile.writelines(bigramDfWithUnknown.sort_values(by="BiProbability", ascending=False).head(10).to_string()+"\n\n")
 
     smoothedBigramDf = bigramFinder(sentenceTokensWitUnknown,unigramDfWithUnknown,0.5,len(filtered_word_freq_unknown))
-    print(smoothedBigramDf.sort_values(by="BiProbability", ascending=False))
-    print(smoothedBigramDf.head())
+    writeFile.writelines("Top 10 Bigrams with UNK:\n\n")
+    writeFile.writelines(smoothedBigramDf.sort_values(by="BiProbability", ascending=False).head(10).to_string()+"\n\n")
+    writeFile.close()
+    # new_sentence = input("Enter your sentence: ")
+    # newSentenceTokens = sentenceTokenize(new_sentence)
+    # newSentenceWordTokens = wordTokenize(new_sentence)
+    # newSentenceUnigram = unigramFinder(newSentenceTokens,len(newSentenceWordTokens))
+    # newSentenceBigram = bigramFinder(newSentenceTokens,newSentenceUnigram,0,0)
+    #
+    # calculateProbabilityOfNewSentence()
 
     print("\n\n--------- Finished Working For "+name+"-------------\n\n")
 
@@ -127,6 +140,7 @@ def generalFunc(path,name):
 
 if __name__ == "__main__":
     pathList = ['./hw01_tiny.txt','./hw01_FireFairies.txt','./hw01_AMemorableFancy.txt']
+    nltk.download('punkt')
     for path in pathList:
         name = path[2:-4]
         generalFunc(path,name)
