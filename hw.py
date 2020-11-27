@@ -78,16 +78,16 @@ def makeLowestUnknown(data,unigramDf):
     newData = data.replace(replaces[0],"UNK").replace(replaces[1],"UNK").replace(replaces[2],"UNK")
     return newData
 
-def calculateProbabilityOfNewSentence(sentBigram,textBigram):
+def calculateProbabilityOfNewSentence(sentBigram,textBigram,unigramDfWithUnk):
     probability = 1
     for bigram in sentBigram:
         if textBigram.loc[textBigram["Text"] == bigram].BiProbability.values.size > 0:
-            probability = textBigram.loc[textBigram["Text"] == bigram].BiProbability.values[
-                              0] * probability
+            probability = textBigram.loc[textBigram["Text"] == bigram].BiProbability.values[0] * probability
         else:
-            probability = 0
+            p = unigramDfWithUnk.loc[unigramDfWithUnk["Text"] == "unk"].Count/ unigramDfWithUnk["Count"].sum().item()
+            probability = probability * p
 
-    return probability
+    return probability.item()
 
 def generalFunc(path,name):
     print("\n\n--------- Starting To Work For "+name+"-------------\n\n")
@@ -141,7 +141,7 @@ def generalFunc(path,name):
         newSentenceUnigram = unigramFinder(newSentenceTokens,len(newSentenceWordTokens))
         newSentenceBigram = bigramFinder(newSentenceTokens,newSentenceUnigram,0,0)
         newSentenceList = newSentenceBigram["Text"].tolist()
-        newProb = calculateProbabilityOfNewSentence(newSentenceList,smoothedBigramDf)
+        newProb = calculateProbabilityOfNewSentence(newSentenceList,smoothedBigramDf,unigramDfWithUnknown)
         writeFile.writelines(new_sentence+"     "+str(newProb)+"\n\n")
 
     writeFile.close()

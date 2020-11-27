@@ -64,3 +64,7 @@ Top 10 Bigrams with UNK:
 175        from the      4       0.003918       0.023622
 178          it was      4       0.003918       0.023256
 
+Light is my magic     1.9677113274516408e-11
+
+power always lies with us     9.765275492271822e-17
+

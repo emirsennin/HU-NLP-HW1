@@ -64,3 +64,7 @@ Top 10 Bigrams with UNK:
 30   <s> stealthily      1       0.008065       0.051724
 100         <s> and      1       0.008065       0.051724
 
+cat heard the bird     3.9296049006259893e-08
+
+bird flies away     4.3225653906885883e-07
+
