@@ -78,8 +78,16 @@ def makeLowestUnknown(data,unigramDf):
     newData = data.replace(replaces[0],"UNK").replace(replaces[1],"UNK").replace(replaces[2],"UNK")
     return newData
 
-def calculateProbabilityOfNewSentence():
-    pass
+def calculateProbabilityOfNewSentence(sentBigram,textBigram):
+    probability = 1
+    for bigram in sentBigram:
+        if textBigram.loc[textBigram["Text"] == bigram].BiProbability.values.size > 0:
+            probability = textBigram.loc[textBigram["Text"] == bigram].BiProbability.values[
+                              0] * probability
+        else:
+            probability = 0
+
+    return probability
 
 def generalFunc(path,name):
     print("\n\n--------- Starting To Work For "+name+"-------------\n\n")
@@ -125,14 +133,18 @@ def generalFunc(path,name):
     smoothedBigramDf = bigramFinder(sentenceTokensWitUnknown,unigramDfWithUnknown,0.5,len(filtered_word_freq_unknown))
     writeFile.writelines("Top 10 Bigrams with UNK:\n\n")
     writeFile.writelines(smoothedBigramDf.sort_values(by="BiProbability", ascending=False).head(10).to_string()+"\n\n")
+
+    for i in range(2):
+        new_sentence = input("Enter your sentence: ")
+        newSentenceTokens = sentenceTokenize(new_sentence)
+        newSentenceWordTokens = wordTokenize(new_sentence)
+        newSentenceUnigram = unigramFinder(newSentenceTokens,len(newSentenceWordTokens))
+        newSentenceBigram = bigramFinder(newSentenceTokens,newSentenceUnigram,0,0)
+        newSentenceList = newSentenceBigram["Text"].tolist()
+        newProb = calculateProbabilityOfNewSentence(newSentenceList,smoothedBigramDf)
+        writeFile.writelines(new_sentence+"     "+str(newProb)+"\n\n")
+
     writeFile.close()
-    # new_sentence = input("Enter your sentence: ")
-    # newSentenceTokens = sentenceTokenize(new_sentence)
-    # newSentenceWordTokens = wordTokenize(new_sentence)
-    # newSentenceUnigram = unigramFinder(newSentenceTokens,len(newSentenceWordTokens))
-    # newSentenceBigram = bigramFinder(newSentenceTokens,newSentenceUnigram,0,0)
-    #
-    # calculateProbabilityOfNewSentence()
 
     print("\n\n--------- Finished Working For "+name+"-------------\n\n")
 
